@@ -238,7 +238,7 @@ jobs:
       with:
         allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: XiaoMi AX3000T ${{ steps.tag.outputs.release_tag }}
+        name: \[Yuri] XiaoMi-AX3000T ${{ steps.tag.outputs.release_tag }}
         tag: ${{ steps.tag.outputs.release_tag }}
         artifacts: ${{ env.FIRMWARE }}/*
         body: |
