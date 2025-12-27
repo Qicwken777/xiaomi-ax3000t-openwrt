@@ -79,49 +79,4 @@ sed -i "s/luci-app-vlmcsd//g" include/target.mk
 
 ./scripts/feeds clean
 ./scripts/feeds update -a
-./scripts/feeds install -a# git clone --depth=1 https://github.com/Jason6111/luci-app-netdata package/luci-app-netdata
-
-# 科学上网插件
-# git clone --depth=1 -b main https://github.com/fw876/helloworld package/luci-app-ssr-plus
-# git clone --depth=1 -b lede https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns
-# git clone --depth=1 https://github.com/pymumu/openwrt-smartdns package/smartdns
-
-
-# Add a feed source
-# echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
-#echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
-# echo 'src-git passwall_luci https://github.com/xiaorouji/openwrt-passwall.git' >>feeds.conf.default
-# echo 'src-git passwall_package https://github.com/xiaorouji/openwrt-passwall-packages' >>feeds.conf.default
-
-# sed -i "/helloworld/d" "feeds.conf.default"
-# echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
-
-
-#git_sparse_clone main https://github.com/linkease/nas-packages-luci luci/luci-app-ddnsto
-#git_sparse_clone master https://github.com/linkease/nas-packages network/services/ddnsto
-
-# iStore
-# git_sparse_clone main https://github.com/linkease/istore-ui app-store-ui
-# git_sparse_clone main https://github.com/linkease/istore luci
-
-# 在线用户
-git_sparse_clone main https://github.com/haiibo/packages luci-app-onliner
-sed -i '$i uci set nlbwmon.@nlbwmon[0].refresh_interval=2s' package/lean/default-settings/files/zzz-default-settings
-sed -i '$i uci commit nlbwmon' package/lean/default-settings/files/zzz-default-settings
-chmod 755 package/luci-app-onliner/root/usr/share/onliner/setnlbw.sh
-
-# 修改版本为编译日期
-date_version=$(date +"%y.%m.%d")
-orig_version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
-sed -i "s/${orig_version}/R${date_version} by go-laoji/g" package/lean/default-settings/files/zzz-default-settings
-
-# 移除默认安装的vsftpd、vlmcsd
-sed -i "s/luci-app-vsftpd//g" include/target.mk
-sed -i "s/luci-app-vlmcsd//g" include/target.mk
-
-# ./scripts/feeds update helloworld
-# ./scripts/feeds install -a -f -p helloworld
-
-./scripts/feeds clean
-./scripts/feeds update -a
 ./scripts/feeds install -a
