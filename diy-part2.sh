@@ -18,3 +18,11 @@ sed -i 's/192.168.1.1/192.168.12.1/g' package/base-files/files/bin/config_genera
 
 # 清除后台密码
 sed -i 's/^root:.*/root::0:0:99999:7:::/' package/base-files/files/etc/shadow
+
+# 劫持miwifi.com
+mkdir -p package/base-files/files/etc/dnsmasq.d
+
+cat << 'EOF' > package/base-files/files/etc/dnsmasq.d/miwifi.conf
+address=/miwifi.com/192.168.12.1
+address=/www.miwifi.com/192.168.12.1
+EOF
