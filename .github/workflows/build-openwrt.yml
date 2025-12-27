@@ -12,8 +12,8 @@ name: Build OpenWrt
 
 on:
   repository_dispatch:
-  schedule:
-    - cron: 0 23 * * 1
+#  schedule:
+#    - cron: 0 23 * * 1
   workflow_dispatch:
     inputs:
       ssh:
@@ -129,10 +129,10 @@ jobs:
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
 
-    - name: Install ddns-go
-      run: |
-        cd openwrt
-        git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
+#    - name: Install ddns-go
+#      run: |
+#        cd openwrt
+#        git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
 
     - name: Install argon
       run: |
