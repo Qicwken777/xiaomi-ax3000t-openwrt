@@ -26,3 +26,16 @@ cat << 'EOF' > package/base-files/files/etc/dnsmasq.d/miwifi.conf
 address=/miwifi.com/192.168.12.1
 address=/www.miwifi.com/192.168.12.1
 EOF
+
+# 修改banner
+cat << 'EOF' > package/base-files/files/etc/banner
+     _________
+    /        /\     __   __          _
+   /  YU    /  \    \ \ / /   _ _ __(_)
+  /    RI  /    \    \ V / | | | '__| |
+ /________/  YU  \    | || |_| | |  | |
+ \        \   RI /    |_| \__,_|_|  |_|
+  \    YU  \    /  -------------------------------------------
+   \  RI    \  /    \s \r
+    \________\/    -------------------------------------------
+EOF
