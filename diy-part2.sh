@@ -93,3 +93,16 @@ config wifi-iface 'default_radio1'
 	option time_advertisement '0'
 	option wpa_disable_eapol_key_retries '1'
 EOF
+
+mkdir -p package/base-files/files/etc
+echo "Yuri" > package/base-files/files/etc/hostname
+
+# 设置 LuCI 设备描述（model）
+mkdir -p package/base-files/files/etc/config
+cat << 'EOF' > package/base-files/files/etc/config/system
+config system
+	option hostname 'Yuri'
+	option description 'Xiaomi-AX3000T'
+	option timezone 'CST-8'
+	option zonename 'Asia/Shanghai'
+EOF
