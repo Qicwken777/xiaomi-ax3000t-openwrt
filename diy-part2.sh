@@ -13,22 +13,35 @@
 # Modify default IP
 # sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/luci2/bin/config_generate
 
+# 修改默认检查地址
+sed -i 's/openwrt.org/mi.com/g' package/base-files/files/etc/config/luci
+
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.12.1/g' package/base-files/files/bin/config_generate
 
 # 清除后台密码
-sed -i 's/^root:.*/root::0:0:99999:7:::/' package/base-files/files/etc/shadow
+sed -i '/\/etc\/shadow/d' package/lean/default-settings/files/zzz-default-settings
+sed -i '/chpasswd/d' package/lean/default-settings/files/zzz-default-settings
+sed -i '/root:\$/d' package/lean/default-settings/files/zzz-default-settings
 
 # 劫持miwifi.com
-mkdir -p package/base-files/files/etc/dnsmasq.d
+sed -i "/config dnsmasq/a \
+\tlist address '/miwifi.com/192.168.12.1'" \
+package/network/services/dnsmasq/files/dhcp.conf
 
-cat << 'EOF' > package/base-files/files/etc/dnsmasq.d/miwifi.conf
-address=/miwifi.com/192.168.12.1
-address=/www.miwifi.com/192.168.12.1
-EOF
+# 读取版本信息
+if [ -f /etc/openwrt_release ]; then
+    source /etc/openwrt_release
+elif [ -f /etc/release ]; then
+    source /etc/release
+fi
+
+# 默认值防止为空
+: ${DISTRIB_RELEASE:="Unknown"}
+: ${DISTRIB_REVISION:="Unknown"}
 
 # 修改banner
-cat << 'EOF' > package/base-files/files/etc/banner
+cat << EOF > package/base-files/files/etc/banner
      _________
     /        /\     __   __          _
    /  YU    /  \    \ \ / /   _ _ __(_)
@@ -36,7 +49,7 @@ cat << 'EOF' > package/base-files/files/etc/banner
  /________/  YU  \    | || |_| | |  | |
  \        \   RI /    |_| \__,_|_|  |_|
   \    YU  \    /  -------------------------------------------
-   \  RI    \  /    \s \r
+   \  RI    \  /    ${DISTRIB_RELEASE}, ${DISTRIB_REVISION}
     \________\/    -------------------------------------------
 EOF
 
@@ -103,6 +116,4 @@ cat << 'EOF' > package/base-files/files/etc/config/system
 config system
 	option hostname 'Yuri'
 	option description 'Xiaomi-AX3000T'
-	option timezone 'CST-8'
-	option zonename 'Asia/Shanghai'
 EOF
