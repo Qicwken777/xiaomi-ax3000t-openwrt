@@ -13,9 +13,6 @@
 # Modify default IP
 # sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/luci2/bin/config_generate
 
-# 修改默认检查地址
-sed -i 's/openwrt.org/mi.com/g' package/base-files/files/etc/config/luci
-
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.12.1/g' package/base-files/files/bin/config_generate
 
@@ -26,8 +23,7 @@ sed -i '/root:\$/d' package/lean/default-settings/files/zzz-default-settings
 
 # 劫持miwifi.com
 sed -i "/config dnsmasq/a \
-\tlist address '/miwifi.com/192.168.12.1'" \
-package/network/services/dnsmasq/files/dhcp.conf
+\        list ipset '/miwifi.com/192.168.12.1'" package/network/services/dnsmasq/files/dhcp.conf
 
 # 读取版本信息
 if [ -f /etc/openwrt_release ]; then
@@ -37,8 +33,7 @@ elif [ -f /etc/release ]; then
 fi
 
 # 默认值防止为空
-: ${DISTRIB_RELEASE:="Unknown"}
-: ${DISTRIB_REVISION:="Unknown"}
+orig_version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
 
 # 修改banner
 cat << EOF > package/base-files/files/etc/banner
@@ -49,8 +44,9 @@ cat << EOF > package/base-files/files/etc/banner
  /________/  YU  \    | || |_| | |  | |
  \        \   RI /    |_| \__,_|_|  |_|
   \    YU  \    /  -------------------------------------------
-   \  RI    \  /    ${DISTRIB_RELEASE}, ${DISTRIB_REVISION}
+   \  RI    \  /    LEDE, ${date_version}
     \________\/    -------------------------------------------
+
 EOF
 
 # 写入 /etc/config/wireless
@@ -97,7 +93,7 @@ config wifi-iface 'default_radio1'
 	option device 'radio1'
 	option network 'lan'
 	option mode 'ap'
-	option ssid 'rd03_minet_12ac_5G'
+	option ssid 'rd03_minet_12ac'
 	option encryption 'none'
 	option multicast_to_unicast '1'
 	option ieee80211k '1'
@@ -114,6 +110,6 @@ echo "Yuri" > package/base-files/files/etc/hostname
 mkdir -p package/base-files/files/etc/config
 cat << 'EOF' > package/base-files/files/etc/config/system
 config system
-	option hostname 'Yuri'
+	option hostname 'AX3000T'
 	option description 'Xiaomi-AX3000T'
 EOF
