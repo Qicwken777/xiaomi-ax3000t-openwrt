@@ -156,7 +156,6 @@ config wifi-iface 'default_radio1'
 EOF
 
 mkdir -p package/base-files/files/etc
-echo "Yuri" > package/base-files/files/etc/hostname
 
 # 设置 LuCI 设备描述（model）
 mkdir -p package/base-files/files/etc/config
