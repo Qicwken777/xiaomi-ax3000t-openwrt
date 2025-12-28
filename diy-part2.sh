@@ -13,14 +13,6 @@
 # Modify default IP
 # sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/luci2/bin/config_generate
 
-# 进入源码目录后执行
-
-# 修改 detect 逻辑，确保首次生成的配置包含 channel='auto'
-sed -i 's/set wireless.radio${devidx}.channel=${channel}/set wireless.radio${devidx}.channel=${channel:-auto}/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-
-# 在配置应用阶段，如果 channel 为空，强制补齐为 auto
-# 这一行会在脚本读取 UCI 后，启动 hostapd 前插入逻辑
-sed -i '/config_get channel "$device" channel/a \	[ -z "$channel" ] && channel="auto"' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.12.1/g' package/base-files/files/bin/config_generate
 
