@@ -16,57 +16,6 @@
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.12.1/g' package/base-files/files/bin/config_generate
 
-# 处理 DHCP 配置注入
-DHCP_CONF="package/base-files/files/etc/config/dhcp"
-mkdir -p $(dirname $DHCP_CONF)
-
-# 如果文件不存在，先创建一个基础模板
-if [ ! -f "$DHCP_CONF" ]; then
-cat << 'EOF' > "$DHCP_CONF"
-config dnsmasq
-	option domainneeded	1
-	option boguspriv	1
-	option filterwin2k	0  # enable for dial on demand
-	option localise_queries	1
-	option rebind_protection 1  # disable if upstream must serve RFC1918 addresses
-	option rebind_localhost 1  # enable for RBL checking and similar services
-	#list rebind_domain example.lan  # whitelist RFC1918 responses for domains
-	option local	'/lan/'
-	option domain	'lan'
-	option expandhosts	1
-	option nonegcache	0
-	option cachesize	8192
-	option authoritative	1
-	option readethers	1
-	option leasefile	'/tmp/dhcp.leases'
-	option resolvfile	'/tmp/resolv.conf.d/resolv.conf.auto'
-	#list server		'/mycompany.local/1.2.3.4'
-	option nonwildcard	1 # bind to & keep track of interfaces
-	#list interface		br-lan
-	#list notinterface	lo
-	#list bogusnxdomain     '64.94.110.11'
-	option localservice	1  # disable to allow DNS requests from non-local subnets
-	option ednspacket_max	1232
-	option filter_aaaa	0
-	option filter_a		0
-	#list addnmount		/some/path # read-only mount path to expose it to dnsmasq
-
-config dhcp lan
-	option interface	lan
-	option start 	100
-	option limit	150
-	option leasetime	12h
-
-config dhcp wan
-	option interface	wan
-	option ignore	1
-EOF
-fi
-
-# 确保注入你的 list ipset 行 (防止重复添加)
-sed -i "/miwifi.com/d" "$DHCP_CONF"
-sed -i "/option ednspacket_max/a \ \ \ \ \ \ \ \ list ipset '/miwifi.com/192.168.12.1'" "$DHCP_CONF"
-
 # 清除后台密码
 sed -i '/\/etc\/shadow/d' package/lean/default-settings/files/zzz-default-settings
 sed -i '/chpasswd/d' package/lean/default-settings/files/zzz-default-settings
