@@ -24,10 +24,6 @@ sed -i '/root:\$/d' package/lean/default-settings/files/zzz-default-settings
 sed -i '/passwall/d' package/base-files/files/etc/opkg/distfeeds.conf 2>/dev/null
 sed -i '/helloworld/d' package/base-files/files/etc/opkg/distfeeds.conf 2>/dev/null
 
-# 劫持miwifi.com
-sed -i "/config dnsmasq/a \
-\        list ipset '/miwifi.com/192.168.12.1'" package/network/services/dnsmasq/files/dhcp.conf
-
 # 读取版本信息
 if [ -f /etc/openwrt_release ]; then
     source /etc/openwrt_release
@@ -120,18 +116,3 @@ EOF
 # Move UPnP from Services to Network
 sed -i 's#admin/services/upnp#admin/network/upnp#g' \
 feeds/luci/applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json
-
-# fix AX
-
-WIFI_LUA="feeds/luci/modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua"
-
-if [ -f "$WIFI_LUA" ]; then
-    echo "[*] Patching LuCI: disable HE/AX channel deletion"
-
-    sed -i \
-        -e 's/\(m:del("wireless",[[:space:]]*section,[[:space:]]*"channel")\)/-- \1/g' \
-        "$WIFI_LUA"
-
-else
-    echo "[!] wifi.lua not found, skip LuCI HE patch"
-fi
