@@ -67,7 +67,7 @@ fi
 
 # 确保注入你的 list ipset 行 (防止重复添加)
 sed -i "/miwifi.com/d" "$DHCP_CONF"
-sed -i "/option ednspacket_max/a \ \ \ \ list ipset '/miwifi.com/192.168.12.1'" "$DHCP_CONF"
+sed -i "/option ednspacket_max/a \ \ \ \ \ \ \ \ list ipset '/miwifi.com/192.168.12.1'" "$DHCP_CONF"
 
 # 清除后台密码
 sed -i '/\/etc\/shadow/d' package/lean/default-settings/files/zzz-default-settings
