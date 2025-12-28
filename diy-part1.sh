@@ -68,7 +68,7 @@ chmod 755 package/luci-app-onliner/root/usr/share/onliner/setnlbw.sh
 # 修改版本为编译日期
 date_version=$(date +"%y.%m.%d")
 orig_version=$(cat "package/lean/default-settings/files/zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
-sed -i "s/${orig_version}/R${date_version} by go-laoji/g" package/lean/default-settings/files/zzz-default-settings
+sed -i "s/${orig_version}/R${date_version} by Qicwken/g" package/lean/default-settings/files/zzz-default-settings
 
 # 移除默认安装的vsftpd、vlmcsd
 sed -i "s/luci-app-vsftpd//g" include/target.mk
