@@ -13,7 +13,7 @@
 # Modify default IP
 # sed -i 's/192.168.1.1/192.168.11.1/g' package/base-files/luci2/bin/config_generate
 
-sed -i '/config_get channel "$device" channel/a \	[ -z "$channel" ] && channel="auto"' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i '/config_get channel "$hostapd_conf" channel/a \	[ -z "$channel" ] && channel="auto"' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
 # 修改默认 IP
 sed -i 's/192.168.1.1/192.168.12.1/g' package/base-files/files/bin/config_generate
