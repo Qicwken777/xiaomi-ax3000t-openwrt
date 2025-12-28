@@ -47,7 +47,7 @@ cat << EOF > package/base-files/files/etc/banner
  /________/  YU  \    | || |_| | |  | |
  \        \   RI /    |_| \__,_|_|  |_|
   \    YU  \    /  -------------------------------------------
-   \  RI    \  /    LEDE, ${date_version}
+   \  RI    \  /    LEDE, ${orig_version}
     \________\/    -------------------------------------------
 
 EOF
@@ -120,3 +120,18 @@ EOF
 # Move UPnP from Services to Network
 sed -i 's#admin/services/upnp#admin/network/upnp#g' \
 feeds/luci/applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json
+
+# fix AX
+
+WIFI_LUA="feeds/luci/modules/luci-mod-network/luasrc/model/cbi/admin_network/wifi.lua"
+
+if [ -f "$WIFI_LUA" ]; then
+    echo "[*] Patching LuCI: disable HE/AX channel deletion"
+
+    sed -i \
+        -e 's/\(m:del("wireless",[[:space:]]*section,[[:space:]]*"channel")\)/-- \1/g' \
+        "$WIFI_LUA"
+
+else
+    echo "[!] wifi.lua not found, skip LuCI HE patch"
+fi
