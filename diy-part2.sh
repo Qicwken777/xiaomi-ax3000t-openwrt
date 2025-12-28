@@ -21,6 +21,9 @@ sed -i '/\/etc\/shadow/d' package/lean/default-settings/files/zzz-default-settin
 sed -i '/chpasswd/d' package/lean/default-settings/files/zzz-default-settings
 sed -i '/root:\$/d' package/lean/default-settings/files/zzz-default-settings
 
+sed -i '/passwall/d' package/base-files/files/etc/opkg/distfeeds.conf 2>/dev/null
+sed -i '/helloworld/d' package/base-files/files/etc/opkg/distfeeds.conf 2>/dev/null
+
 # 劫持miwifi.com
 sed -i "/config dnsmasq/a \
 \        list ipset '/miwifi.com/192.168.12.1'" package/network/services/dnsmasq/files/dhcp.conf
@@ -113,3 +116,7 @@ config system
 	option hostname 'AX3000T'
 	option description 'Xiaomi-AX3000T'
 EOF
+
+# Move UPnP from Services to Network
+sed -i 's#admin/services/upnp#admin/network/upnp#g' \
+feeds/luci/applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json
